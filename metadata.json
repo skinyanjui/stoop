@@ -1,0 +1,6 @@
+{
+  "name": "Stoop",
+  "description": "Find garage sales, yard sales, car boot sales and flea markets near you on a map. Search by item, see hours, save favorites, and post your own sale.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

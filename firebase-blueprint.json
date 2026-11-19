@@ -1,0 +1,194 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Authenticated user profile with saved payment defaults and favorite sale IDs.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth UID of the user."
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name shown on the user's profile.",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "User email address stored strictly in their private profile.",
+          "maxLength": 160
+        },
+        "payments": {
+          "type": "array",
+          "description": "Default payment method IDs accepted by the seller."
+        },
+        "savedIds": {
+          "type": "array",
+          "description": "Sale IDs bookmarked by the user."
+        },
+        "listingOrder": {
+          "type": "array",
+          "description": "Custom display order of sale IDs posted by the user."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the profile was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the profile was last updated."
+        }
+      },
+      "required": ["uid", "name", "payments", "savedIds", "createdAt", "updatedAt"]
+    },
+    "Sale": {
+      "title": "Sale",
+      "description": "A public garage, yard, estate, or car boot sale listing.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Short name of the sale.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "address": {
+          "type": "string",
+          "description": "Public street address of the sale.",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "lat": {
+          "type": "number",
+          "description": "Latitude coordinate (-90 to 90)."
+        },
+        "lng": {
+          "type": "number",
+          "description": "Longitude coordinate (-180 to 180)."
+        },
+        "date": {
+          "type": "string",
+          "description": "Sale date in YYYY-MM-DD format.",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "start": {
+          "type": "string",
+          "description": "Opening time in HH:MM 24-hour format.",
+          "pattern": "^\\d{2}:\\d{2}$"
+        },
+        "end": {
+          "type": "string",
+          "description": "Closing time in HH:MM 24-hour format.",
+          "pattern": "^\\d{2}:\\d{2}$"
+        },
+        "saleType": {
+          "type": "string",
+          "enum": ["Garage Sale", "Flea Market", "Car Boot Sale"],
+          "description": "Type of sale event (Garage Sale, Flea Market, or Car Boot Sale)."
+        },
+        "cats": {
+          "type": "array",
+          "description": "Category labels associated with the sale."
+        },
+        "items": {
+          "type": "array",
+          "description": "Notable items available at the sale."
+        },
+        "prices": {
+          "type": "object",
+          "description": "Optional map of item name to numeric price."
+        },
+        "level": {
+          "type": "number",
+          "description": "Overall price tier (0-3)."
+        },
+        "cur": {
+          "type": "string",
+          "description": "ISO 3-letter currency code.",
+          "minLength": 3,
+          "maxLength": 3
+        },
+        "food": {
+          "type": "boolean",
+          "description": "Whether food is offered at the sale."
+        },
+        "drinks": {
+          "type": "boolean",
+          "description": "Whether drinks or lemonade are offered at the sale."
+        },
+        "photos": {
+          "type": "array",
+          "description": "Up to 4 compressed JPEG data URLs or photo paths."
+        },
+        "pay": {
+          "type": "array",
+          "description": "Accepted payment method IDs."
+        },
+        "desc": {
+          "type": "string",
+          "description": "Optional sale highlights and parking notes.",
+          "maxLength": 2000
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active"],
+          "description": "Listing visibility status."
+        },
+        "ownerUid": {
+          "type": "string",
+          "description": "Firebase Auth UID of the seller who posted the sale.",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the sale was posted."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the sale was last modified."
+        }
+      },
+      "required": [
+        "title",
+        "address",
+        "lat",
+        "lng",
+        "date",
+        "start",
+        "end",
+        "saleType",
+        "cats",
+        "items",
+        "level",
+        "cur",
+        "food",
+        "drinks",
+        "photos",
+        "pay",
+        "desc",
+        "status",
+        "ownerUid",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Private user profiles storing seller payment defaults and bookmarked sales."
+    },
+    "/sales/{saleId}": {
+      "schema": { "$ref": "#/entities/Sale" },
+      "description": "Public community garage, yard, and car boot sale listings."
+    }
+  }
+}
